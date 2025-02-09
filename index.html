@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASCII Art Generator with Advanced Animation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <!-- Global Settings -->
+      <section class="control-group global-settings">
+        <h3>Global Settings</h3>
+        <div class="control">
+          <label for="theme">Theme:</label>
+          <select id="theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="ignoreWhite">Ignore Pure White:</label>
+          <input type="checkbox" id="ignoreWhite" checked>
+        </div>
+      </section>
+      
+      <!-- Upload File -->
+      <section class="control-group upload-group">
+        <h3>1. Upload Your File</h3>
+        <div class="control">
+          <input type="file" id="upload" accept="image/*">
+        </div>
+      </section>
+      
+      <!-- Basic Adjustments -->
+      <section class="control-group image-processing">
+        <h3>2. Basic Adjustments</h3>
+        <div class="control">
+          <label for="asciiWidth">Output Width (chars):</label>
+          <input type="range" id="asciiWidth" min="20" max="300" value="150">
+          <span class="value-label" id="asciiWidthVal">150</span>
+        </div>
+        <div class="control">
+          <label for="brightness">Brightness:</label>
+          <input type="range" id="brightness" min="-100" max="100" value="0">
+          <span class="value-label" id="brightnessVal">0</span>
+        </div>
+        <div class="control">
+          <label for="contrast">Contrast:</label>
+          <input type="range" id="contrast" min="-100" max="100" value="0">
+          <span class="value-label" id="contrastVal">0</span>
+        </div>
+        <div class="control">
+          <label for="blur">Blur (px):</label>
+          <input type="range" id="blur" min="0" max="10" step="0.01" value="0">
+          <span class="value-label" id="blurVal">0</span>
+        </div>
+        <div class="control">
+          <label for="invert">Invert Colors:</label>
+          <input type="checkbox" id="invert">
+        </div>
+      </section>
+      
+      <!-- Dithering Options -->
+      <section class="control-group dithering-settings">
+        <h3>3. Dithering Options</h3>
+        <div class="control">
+          <label for="dithering">Enable Dithering:</label>
+          <input type="checkbox" id="dithering" checked>
+        </div>
+        <div class="control">
+          <label for="ditherAlgorithm">Dither Algorithm:</label>
+          <select id="ditherAlgorithm">
+            <option value="floyd" selected>Floyd–Steinberg</option>
+            <option value="atkinson">Atkinson</option>
+            <option value="noise">Noise</option>
+            <option value="ordered">Ordered</option>
+          </select>
+        </div>
+      </section>
+      
+      <!-- Character Set -->
+      <section class="control-group charset-settings">
+        <h3>4. Character Set</h3>
+        <div class="control">
+          <label for="charset">Select Set:</label>
+          <select id="charset">
+            <option value="detailed" selected>Detailed</option>
+            <option value="standard">Standard</option>
+            <option value="blocks">Blocks</option>
+            <option value="binary">Binary</option>
+            <option value="hex">Hex</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div class="control" id="manualCharControl" style="display: none;">
+          <label for="manualCharInput">Manual Character:</label>
+          <input type="text" id="manualCharInput" maxlength="1" value="0">
+        </div>
+      </section>
+      
+      <!-- Edge Detection -->
+      <section class="control-group edge-detection-settings">
+        <h3>5. Edge Detection</h3>
+        <p>Select one edge detection method:</p>
+        <div class="control">
+          <input type="radio" name="edgeMethod" id="edgeNone" value="none" checked>
+          <label for="edgeNone">No Edge Detection</label>
+        </div>
+        <div class="control">
+          <input type="radio" name="edgeMethod" id="edgeSobel" value="sobel">
+          <label for="edgeSobel">Sobel Edge Detection</label>
+        </div>
+        <div class="control">
+          <input type="radio" name="edgeMethod" id="edgeDoG" value="dog">
+          <label for="edgeDoG">DoG (Contour) Detection</label>
+        </div>
+        <div class="control" id="sobelThresholdControl" style="display: none;">
+          <label for="edgeThreshold">Sobel Threshold:</label>
+          <input type="range" id="edgeThreshold" min="0" max="255" value="100">
+          <span class="value-label" id="edgeThresholdVal">100</span>
+        </div>
+        <div class="control" id="dogThresholdControl" style="display: none;">
+          <label for="dogEdgeThreshold">DoG Threshold:</label>
+          <input type="range" id="dogEdgeThreshold" min="0" max="255" value="100">
+          <span class="value-label" id="dogEdgeThresholdVal">100</span>
+        </div>
+      </section>
+      
+      <!-- Display Settings -->
+      <section class="control-group display-settings">
+        <h3>6. Display Settings</h3>
+        <div class="control">
+          <label for="zoom">Zoom (%):</label>
+          <input type="range" id="zoom" min="20" max="600" value="100">
+          <span class="value-label" id="zoomVal">100</span>
+        </div>
+      </section>
+      
+      <!-- Animation Options -->
+      <section class="control-group animation-settings">
+        <h3>7. Animation Settings</h3>
+        <div class="control">
+          <label for="animate">Enable Animation:</label>
+          <input type="checkbox" id="animate">
+        </div>
+        <div class="control">
+          <label for="animationType">Animation Type:</label>
+          <select id="animationType">
+            <option value="typewriter" selected>Typewriter</option>
+            <option value="wave">Wave</option>
+            <option value="bounce">Bounce</option>
+            <option value="colorCycle">Color Cycle</option>
+            <option value="glitch">Glitch</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="animationSpeed">Animation Speed:</label>
+          <input type="range" id="animationSpeed" min="1" max="60" value="30">
+          <span class="value-label" id="animationSpeedVal">30</span>
+        </div>
+        <div class="control">
+          <label for="animationAmplitude">Base Amplitude:</label>
+          <input type="range" id="animationAmplitude" min="0" max="50" value="10">
+          <span class="value-label" id="animationAmplitudeVal">10</span>
+        </div>
+        <div class="control">
+          <label for="oscillatorFrequency">Oscillator Frequency:</label>
+          <input type="range" id="oscillatorFrequency" min="0.1" max="10" step="0.1" value="1">
+          <span class="value-label" id="oscillatorFrequencyVal">1</span>
+        </div>
+        <div class="control">
+          <label for="oscillatorAmplitude">Oscillator Amplitude:</label>
+          <input type="range" id="oscillatorAmplitude" min="0" max="50" value="0">
+          <span class="value-label" id="oscillatorAmplitudeVal">0</span>
+        </div>
+        <div class="control">
+          <label for="animationHue">Animation Hue Shift:</label>
+          <input type="range" id="animationHue" min="0" max="360" value="0">
+          <span class="value-label" id="animationHueVal">0</span>
+        </div>
+        <div class="control">
+          <label for="colorMode">Color Mode:</label>
+          <select id="colorMode">
+            <option value="rainbow" selected>Rainbow</option>
+            <option value="monochrome">Monochrome</option>
+            <option value="gradient">Gradient</option>
+            <option value="random">Random</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="control" id="customColorControl" style="display:none;">
+          <label for="customColor">Custom Color:</label>
+          <input type="color" id="customColor" value="#ff0000">
+        </div>
+        <div class="control" id="gradientColorsControl" style="display:none;">
+          <label for="gradientColors">Gradient Colors (comma‐separated hex):</label>
+          <input type="text" id="gradientColors" value="#ff0000, #00ff00, #0000ff">
+        </div>
+      </section>
+      
+      <!-- Export Options -->
+      <section class="control-group export-settings">
+        <h3>Export Options</h3>
+        <div class="control">
+          <label for="exportFormat">Format:</label>
+          <select id="exportFormat">
+            <option value="png">PNG</option>
+            <option value="gif" selected>GIF (Transparent)</option>
+            <option value="video">Video (GIF)</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="exportDuration">Duration (s):</label>
+          <input type="number" id="exportDuration" value="3" min="1" max="10">
+        </div>
+        <div class="control">
+          <label for="exportFrameRate">Frame Rate (fps):</label>
+          <input type="number" id="exportFrameRate" value="15" min="1" max="60">
+        </div>
+        <!-- Add the export button right under the export options -->
+        <div class="control">
+          <button id="downloadGifBtn">Download Transparent GIF</button>
+        </div>
+      </section>
+      
+      <!-- Misc Settings -->
+      <section class="control-group misc-settings">
+        <div class="control">
+          <button id="reset">Reset All Settings</button>
+        </div>
+      </section>
+    </aside>
+    
+    <main class="main-content">
+      <pre id="ascii-art"></pre>
+      <button id="copyBtn">Copy ASCII Art</button>
+      <button id="downloadBtn">Download PNG</button>
+    </main>
+  </div>
+  <canvas id="canvas" style="display: none;"></canvas>
+  <!-- Load gif.js before our script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
